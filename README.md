@@ -3,6 +3,7 @@
 This repository explores the use of **GPU parallel processing** in the context of **Artificial Intelligence (AI)**, specifically leveraging GPUs for accelerating computations in deep learning tasks. This project is designed for hands-on experimentation using both **Google Colab** and **school lab GPUs**. The goal is to gain a practical understanding of how GPUs can be used for tasks like training AI models faster, performing large-scale matrix operations, and improving the efficiency of parallel algorithms.
 
 ## Topics Covered
+
 - **Introduction to GPU Parallel Programming**
   - Basics of GPU architecture
   - Introduction to **CUDA** and **OpenCL**
@@ -25,24 +26,26 @@ This repository explores the use of **GPU parallel processing** in the context o
 
 ## Repository Structure
 
-```
+```markdown
 /GPU-Parallel-Processing-AI
   ├── README.md          # This file
   ├── gpu_programming/    # Basic GPU programming exercises
   ├── ai_with_gpu/        # AI models accelerated with GPU
   ├── benchmarking/       # Performance benchmarking and profiling
   ├── docs/               # Detailed documentation and setup guides
-  ├── colab_notebooks/    # Google Colab notebooks
   └── LICENSE             # Open-source license
 ```
 
 ## Getting Started
 
 ### **Google Colab:**
+
 You can start experimenting with GPUs using Google Colab. Simply open the respective notebook in the `colab_notebooks/` folder to begin training models or running experiments on the cloud-based GPU.
 
 ### **School Lab GPUs:**
+
 For local experimentation, make sure your school lab GPU has the necessary software installed:
+
 - **CUDA Toolkit**
 - **cuDNN** (for AI tasks)
 - **PyTorch or TensorFlow** (for deep learning models)
