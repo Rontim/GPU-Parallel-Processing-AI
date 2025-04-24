@@ -14,6 +14,14 @@ import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 import extra_streamlit_components as stx
 
+# Set page config - MUST BE THE FIRST STREAMLIT COMMAND
+st.set_page_config(
+    page_title="GPU Profiling Dashboard",
+    page_icon="🚀",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # Add custom CSS for material design and better UI
 st.markdown("""
 <style>
@@ -186,14 +194,6 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-
-# Set page config
-st.set_page_config(
-    page_title="GPU Profiling Dashboard",
-    page_icon="🚀",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Check if CUDA is available (both PyTorch and CuPy)
 try:
