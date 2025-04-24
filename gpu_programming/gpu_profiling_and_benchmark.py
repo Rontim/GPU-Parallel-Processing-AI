@@ -11,6 +11,181 @@ from tabulate import tabulate
 from datetime import datetime
 import plotly.express as px
 import plotly.graph_objects as go
+from streamlit_option_menu import option_menu
+import extra_streamlit_components as stx
+
+# Add custom CSS for material design and better UI
+st.markdown("""
+<style>
+    /* Material Design Colors */
+    :root {
+        --primary-color: #2962FF;
+        --secondary-color: #7B1FA2;
+        --background-color: #F5F5F5;
+        --surface-color: #FFFFFF;
+        --text-color: #212121;
+        --success-color: #4CAF50;
+        --warning-color: #FFC107;
+        --error-color: #F44336;
+    }
+    
+    /* Card styles */
+    .card {
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        background-color: var(--surface-color);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    .card-title {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.3rem;
+    }
+    .card-content {
+        color: var(--text-color);
+    }
+    
+    /* Metric styles */
+    .metric-card {
+        background-color: var(--surface-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+    .metric-card:hover {
+        transform: scale(1.03);
+    }
+    .metric-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    .metric-label {
+        font-size: 0.9rem;
+        color: #757575;
+        margin-bottom: 0.5rem;
+    }
+    .metric-delta {
+        color: var(--success-color);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    /* Button styles */
+    .stButton>button {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        background-color: #0D47A1;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    /* Dataframe styling */
+    .dataframe-container {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin: 1rem 0;
+    }
+    
+    /* Tabs styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 5px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: #f0f2f6;
+        border-radius: 8px 8px 0px 0px;
+        gap: 1px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    /* Header styles */
+    h1, h2, h3 {
+        color: var(--primary-color);
+    }
+    h1 {
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        border-bottom: 3px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+    }
+    h2 {
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    h3 {
+        font-weight: 500;
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
+        color: var(--secondary-color);
+    }
+    
+    /* Progress bar styling */
+    .stProgress > div > div > div > div {
+        background-color: var(--primary-color);
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        background-color: #f5f5f5;
+        border-radius: 5px;
+    }
+    .streamlit-expanderContent {
+        border-left: 1px solid #e0e0e0;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        border-radius: 0 0 5px 5px;
+        padding: 10px;
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background-color: #f5f7fa;
+    }
+    .css-1d391kg .sidebar .sidebar-content {
+        background-color: #f5f7fa;
+    }
+    
+    /* Footer style */
+    footer {
+        border-top: 1px solid #e0e0e0;
+        padding-top: 1rem;
+        margin-top: 2rem;
+        color: #757575;
+        text-align: center;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Set page config
 st.set_page_config(
@@ -33,32 +208,84 @@ except Exception as e:
     st.error(f"Error checking CuPy availability: {e}")
     cupy_available = False
 
-# App title and description
-st.title("🚀 GPU Detection & Profiling Dashboard")
+# App title and description with material design styling
+st.markdown("<h1 style='text-align: center; margin-bottom: 30px;'>🚀 GPU Detection & Profiling Dashboard</h1>",
+            unsafe_allow_html=True)
 st.markdown("""
-This dashboard presents a comprehensive analysis of your system's GPU capabilities,
-memory performance, and processing power. Use this information to optimize your
-deep learning and data science workflows.
-""")
+<div style='background-color: #E3F2FD; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 5px solid #2962FF;'>
+    <p style='margin: 0; font-size: 1.1rem;'>This dashboard presents a comprehensive analysis of your system's GPU capabilities, 
+    memory performance, and processing power. Use this information to optimize your deep learning and data science workflows.</p>
+</div>
+""", unsafe_allow_html=True)
 
-# Sidebar
+# Sidebar with better styling
 with st.sidebar:
-    st.header("Navigation")
-    page = st.radio(
-        "Select a section:",
-        ["System Information", "GPU Detection", "Memory Profile",
-            "Performance Benchmark", "Custom Operations", "Comparison", "Benchmark Summary"]
+    st.markdown("<h2 style='text-align: center; color: #2962FF;'>Dashboard Controls</h2>",
+                unsafe_allow_html=True)
+
+    # Use option_menu for better looking navigation
+    selected = option_menu(
+        menu_title=None,
+        options=["System Information", "GPU Detection", "Memory Profile",
+                 "Performance Benchmark", "Custom Operations", "Comparison", "Benchmark Summary"],
+        icons=["pc-display", "gpu-card", "memory", "speedometer",
+               "tools", "bar-chart", "clipboard-data"],
+        menu_icon="cast",
+        default_index=0,
+        styles={
+            "container": {"padding": "0!important", "background-color": "#f0f2f6", "border-radius": "10px"},
+            "icon": {"color": "#2962FF", "font-size": "14px"},
+            "nav-link": {"font-size": "14px", "text-align": "left", "margin": "0px", "--hover-color": "#eee"},
+            "nav-link-selected": {"background-color": "#2962FF", "color": "white"},
+        }
     )
 
-    st.header("About")
-    st.info("""
-    This application provides diagnostics about your GPU setup and performance metrics.
-    Perfect for understanding your hardware capabilities for AI and ML workloads.
-    """)
+    # Update page variable to use selected from option_menu
+    page = selected
 
-# System Information Section
+    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #304FFE;'>About</h3>",
+                unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style='background-color: #E8EAF6; padding: 1rem; border-radius: 8px; margin-top: 1rem; border-left: 4px solid #3F51B5;'>
+        <p style='margin: 0; font-size: 0.9rem;'>
+        This application provides diagnostics about your GPU setup and performance metrics.
+        Perfect for understanding your hardware capabilities for AI and ML workloads.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Add system status indicators
+    st.markdown("<h3 style='text-align: center; color: #304FFE; margin-top: 20px;'>System Status</h3>",
+                unsafe_allow_html=True)
+
+    # CUDA Status
+    cuda_status = "✅ Available" if pytorch_cuda_available else "❌ Not Available"
+    cuda_color = "#4CAF50" if pytorch_cuda_available else "#F44336"
+
+    st.markdown(f"""
+    <div style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <span>CUDA Status:</span>
+        <span style='color: {cuda_color}; font-weight: bold;'>{cuda_status}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # RAM Status
+    ram = psutil.virtual_memory()
+    ram_status = "Good" if ram.percent < 80 else "High Usage"
+    ram_color = "#4CAF50" if ram.percent < 80 else "#F44336"
+
+    st.markdown(f"""
+    <div style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <span>Memory Usage:</span>
+        <span style='color: {ram_color}; font-weight: bold;'>{ram_status} ({ram.percent}%)</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Main content area - System Information
 if page == "System Information":
-    st.header("💻 System Information")
+    st.markdown("<h2>💻 System Information</h2>", unsafe_allow_html=True)
 
     # Function to get system info
     def get_system_info():
@@ -80,11 +307,16 @@ if page == "System Information":
     # Get system info
     system_info = get_system_info()
 
-    # Display system info in two columns
+    # Display system info in two cards with better styling
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Hardware")
+        st.markdown("""
+        <div class="card">
+            <div class="card-title">Hardware Specifications</div>
+            <div class="card-content">
+        """, unsafe_allow_html=True)
+
         st.metric("Operating System", system_info["Operating System"])
         st.metric("Architecture", system_info["Architecture"])
         st.metric("Processor", system_info["Processor"])
@@ -92,31 +324,158 @@ if page == "System Information":
         st.metric("CPU Cores (Logical)", system_info["CPU Cores (Logical)"])
         st.metric("Total RAM", system_info["Total RAM"])
 
+        st.markdown("</div></div>", unsafe_allow_html=True)
+
     with col2:
-        st.subheader("Software")
+        st.markdown("""
+        <div class="card">
+            <div class="card-title">Software Environment</div>
+            <div class="card-content">
+        """, unsafe_allow_html=True)
+
         st.metric("Python Version", system_info["Python Version"])
         st.metric("NumPy Version", system_info["NumPy Version"])
         st.metric("PyTorch Version", system_info["PyTorch Version"])
         st.metric("CuPy Version", system_info["CuPy Version"])
         st.metric("Date & Time", system_info["Date & Time"])
 
-    # RAM Usage
-    st.subheader("RAM Usage")
+        st.markdown("</div></div>", unsafe_allow_html=True)
+
+    # RAM Usage with better styling
+    st.markdown("""
+    <div class="card">
+        <div class="card-title">Memory Usage Statistics</div>
+        <div class="card-content">
+    """, unsafe_allow_html=True)
+
     ram = psutil.virtual_memory()
     ram_used_gb = ram.used / (1024**3)
     ram_total_gb = ram.total / (1024**3)
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total RAM", f"{ram_total_gb:.2f} GB")
-    col2.metric("Used RAM", f"{ram_used_gb:.2f} GB")
-    col3.metric("RAM Usage", f"{ram.percent}%")
 
-    # RAM usage progress bar
-    st.progress(ram.percent / 100)
+    # Custom styled metrics
+    col1.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-label">Total RAM</div>
+        <div class="metric-value">{ram_total_gb:.2f} GB</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col2.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-label">Used RAM</div>
+        <div class="metric-value">{ram_used_gb:.2f} GB</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col3.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-label">RAM Usage</div>
+        <div class="metric-value">{ram.percent}%</div>
+        <div class="metric-delta">{'⚠️ High' if ram.percent > 80 else '✓ Normal'}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # RAM usage progress bar with custom styling
+    if ram.percent > 80:
+        st.markdown(f"""
+        <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: #757575; font-size: 0.9rem;">Memory Usage</span>
+                <span style="color: #F44336; font-weight: bold; font-size: 0.9rem;">{ram.percent}%</span>
+            </div>
+            <div style="height: 10px; background-color: #ECEFF1; border-radius: 5px; overflow: hidden;">
+                <div style="width: {ram.percent}%; height: 100%; background-color: #F44336;"></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: #757575; font-size: 0.9rem;">Memory Usage</span>
+                <span style="color: #4CAF50; font-weight: bold; font-size: 0.9rem;">{ram.percent}%</span>
+            </div>
+            <div style="height: 10px; background-color: #ECEFF1; border-radius: 5px; overflow: hidden;">
+                <div style="width: {ram.percent}%; height: 100%; background-color: #4CAF50;"></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("</div></div>", unsafe_allow_html=True)
+
+    # System Resource Monitor (New Section)
+    st.markdown("""
+    <div class="card">
+        <div class="card-title">System Resource Monitor</div>
+        <div class="card-content">
+    """, unsafe_allow_html=True)
+
+    # CPU Usage
+    cpu_percent = psutil.cpu_percent()
+
+    st.markdown(f"""
+    <div style="margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #757575; font-size: 0.9rem;">CPU Usage</span>
+            <span style="color: {'#F44336' if cpu_percent > 80 else '#4CAF50'}; font-weight: bold; font-size: 0.9rem;">{cpu_percent}%</span>
+        </div>
+        <div style="height: 10px; background-color: #ECEFF1; border-radius: 5px; overflow: hidden;">
+            <div style="width: {cpu_percent}%; height: 100%; background-color: {'#F44336' if cpu_percent > 80 else '#4CAF50'};"></div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Disk Usage
+    disk = psutil.disk_usage('/')
+    disk_percent = disk.percent
+
+    st.markdown(f"""
+    <div style="margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #757575; font-size: 0.9rem;">Disk Usage</span>
+            <span style="color: {'#F44336' if disk_percent > 80 else '#4CAF50'}; font-weight: bold; font-size: 0.9rem;">{disk_percent}%</span>
+        </div>
+        <div style="height: 10px; background-color: #ECEFF1; border-radius: 5px; overflow: hidden;">
+            <div style="width: {disk_percent}%; height: 100%; background-color: {'#F44336' if disk_percent > 80 else '#4CAF50'};"></div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Disk Total</div>
+            <div class="metric-value">{disk.total / (1024**3):.1f} GB</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Disk Free</div>
+            <div class="metric-value">{disk.free / (1024**3):.1f} GB</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 # GPU Detection Section
 elif page == "GPU Detection":
-    st.header("🖥️ GPU Detection")
+    st.markdown("<h2>🖥️ GPU Detection</h2>", unsafe_allow_html=True)
+
+    # Add a nicer introduction card
+    st.markdown("""
+    <div style='background-color: #E8F5E9; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 5px solid #4CAF50;'>
+        <p style='margin: 0; font-size: 1.1rem;'>
+        This section identifies and displays detailed information about the available GPUs in your system.
+        It uses both PyTorch and CuPy APIs to gather comprehensive hardware specifications.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Function to detect GPUs
     def detect_gpu():
@@ -182,14 +541,23 @@ elif page == "GPU Detection":
             st.warning("CuPy not available for GPU detection")
             return None
 
-    # Detect GPUs
-    gpu_info = detect_gpu()
+    # Add a spinning progress indicator while detecting GPUs
+    with st.spinner("🔍 Detecting GPUs..."):
+        # Detect GPUs
+        gpu_info = detect_gpu()
 
     # Display GPU info in a table if available
     if gpu_info:
-        st.subheader("GPU Summary")
+        st.markdown("""
+        <div class="card">
+            <div class="card-title">GPU Summary</div>
+            <div class="card-content">
+        """, unsafe_allow_html=True)
+
         df = pd.DataFrame(gpu_info)
-        st.dataframe(df)
+        st.dataframe(df, use_container_width=True)
+
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
         # Visualize GPU Memory
         st.subheader("GPU Memory Comparison")
@@ -1106,7 +1474,10 @@ elif page == "Comparison":
 
     st.plotly_chart(fig, use_container_width=True)
 
-# Footer
-st.markdown("---")
-st.markdown(
-    "👨‍💻 Created for technical presentations on GPU capabilities and performance analysis")
+# Footer with material design styling
+st.markdown("""
+<footer>
+    <p>👨‍💻 Created for technical presentations on GPU capabilities and performance analysis</p>
+    <p style="font-size: 0.8rem;">© 2025 GPU Profiling Dashboard | Version 1.0</p>
+</footer>
+""", unsafe_allow_html=True)
