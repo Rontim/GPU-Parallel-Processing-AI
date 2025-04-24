@@ -60,3 +60,107 @@ Follow the setup instructions in the `/docs/setup.md` file to configure your loc
 3. Create a pull request with your changes.
 
 Feel free to submit issues or suggestions for further improvements and new experiments.
+
+## 🚀 AI Acceleration with Streamlit
+
+A Streamlit application that demonstrates the power of GPU acceleration for AI and machine learning tasks. This interactive app compares CPU vs GPU performance for various operations and provides visual insights into how GPUs accelerate AI workloads.
+
+## 📋 Features
+
+- **System Information**: Displays detailed information about your system, including CPU, RAM, and GPU detection.
+- **Matrix Operations Benchmark**: Compares CPU vs GPU performance for common matrix operations.
+- **Neural Network from Scratch**: Builds and trains a neural network on both CPU and GPU, showing real-time performance comparisons.
+- **Neural Network Components**: Breaks down neural network training into components to analyze where GPU acceleration provides the most benefit.
+- **About GPU Acceleration**: Educational content explaining GPU architecture and its benefits for AI.
+
+## 🛠️ Requirements
+
+- Python 3.8+
+- CUDA-compatible GPU (optional, but recommended for comparisons)
+- Dependencies listed in `requirements.txt`
+
+## 🔧 Installation
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/Rontim/GPU-Parallel-Processing-AI.git
+   cd GPU-Parallel-Processing-AI
+   ```
+
+2. Create and activate a virtual environment (recommended):
+
+   ```bash
+   # For Windows
+   python -m venv venv
+   venv\Scripts\activate
+   
+   # For macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install the required packages:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   Note: If you have a GPU, make sure to install the correct version of CuPy that matches your CUDA version:
+
+   ```bash
+   # For CUDA 11.x
+   pip install cupy-cuda11x
+   
+   # For CUDA 12.x
+   pip install cupy-cuda12x
+   ```
+
+## 🚀 Running the Application
+
+Run the Streamlit app:
+
+```bash
+streamlit run ai_with_gpu/ai_with_gpu.py
+```
+
+The application will open in your default web browser. If it doesn't open automatically, you can access it at `http://localhost:8501`.
+
+## 🧠 Neural Network Implementation
+
+The application includes a neural network implemented from scratch with both CPU and GPU support:
+
+- Fully connected network architecture
+- Forward and backward propagation
+- Gradient descent optimization
+- Binary classification for the "moons" dataset
+- Interactive visualization of decision boundaries
+
+## 📊 Benchmarks
+
+The benchmarking sections provide real-time comparisons between CPU and GPU performance for:
+
+- Matrix operations (multiplication, element-wise operations, transpose)
+- Neural network training and inference
+- Individual components of neural network (forward pass, backward pass, parameter updates)
+
+## 📝 Notes
+
+- GPU acceleration requires a CUDA-compatible GPU and appropriate drivers.
+- The speedup from GPU acceleration varies depending on the operation and data size.
+- For very small operations, the overhead of transferring data to the GPU may outweigh the benefits.
+
+## 📚 References
+
+- [CUDA Documentation](https://docs.nvidia.com/cuda/)
+- [CuPy Documentation](https://docs.cupy.dev/en/stable/)
+- [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
+- [GPU-Accelerated Computing with Python](https://developer.nvidia.com/how-to-cuda-python)
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Rontim/GPU-Parallel-Processing-AI/issues).
+
+## 📜 License
+
+This project is [MIT](LICENSE) licensed.
