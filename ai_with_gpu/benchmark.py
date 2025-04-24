@@ -3,8 +3,8 @@ import cupy as cp
 import time
 import matplotlib.pyplot as plt
 import pandas as pd
-from .utils import has_cupy, to_device, to_cpu, benchmark_operation
-from .neural_network import NeuralNetwork, generate_data
+from utils import has_cupy, to_device, to_cpu, benchmark_operation
+from neural_network import NeuralNetwork, generate_data
 
 
 def run_matrix_operations_benchmark(sizes=None, runs=3):

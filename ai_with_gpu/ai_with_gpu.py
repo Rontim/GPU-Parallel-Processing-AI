@@ -1,12 +1,3 @@
-from ai_with_gpu.benchmark import (
-    run_matrix_operations_benchmark,
-    benchmark_neural_network,
-    benchmark_neural_network_components,
-    plot_matrix_benchmark_results,
-    plot_nn_component_benchmark
-)
-from ai_with_gpu.neural_network import NeuralNetwork, generate_data, plot_data, plot_decision_boundary, plot_training_loss
-from ai_with_gpu.utils import get_system_info, has_pytorch_gpu, has_cupy, plot_comparison
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -15,12 +6,21 @@ import time
 from pathlib import Path
 import sys
 
+# Local imports
+from benchmark import (
+    run_matrix_operations_benchmark,
+    benchmark_neural_network,
+    benchmark_neural_network_components,
+    plot_matrix_benchmark_results,
+    plot_nn_component_benchmark
+)
+from neural_network import NeuralNetwork, generate_data, plot_data, plot_decision_boundary, plot_training_loss
+from utils import get_system_info, has_pytorch_gpu, has_cupy, plot_comparison
+
 # Add the parent directory to sys.path to enable imports
 parent_dir = str(Path(__file__).parent.parent)
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
-
-# Local imports
 
 # Page configuration
 st.set_page_config(
