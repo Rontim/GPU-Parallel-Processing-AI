@@ -2,7 +2,7 @@ import numpy as np
 import cupy as cp
 from sklearn.datasets import make_moons
 import matplotlib.pyplot as plt
-from utils import to_device, to_cpu, sigmoid, tanh, binary_cross_entropy, has_cupy
+from .utils import to_device, to_cpu, sigmoid, tanh, binary_cross_entropy, has_cupy
 
 
 class NeuralNetwork:
