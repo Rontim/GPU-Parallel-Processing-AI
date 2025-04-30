@@ -226,8 +226,7 @@ with st.sidebar:
     # Use option_menu for better looking navigation
     selected = option_menu(
         menu_title=None,
-        options=["System Information", "GPU Detection", "Memory Profile",
-                 "Performance Benchmark", "Custom Operations", "Comparison", "Benchmark Summary"],
+        options=["System Information", "GPU Detection",  "Benchmark Summary"],
         icons=["pc-display", "gpu-card", "memory", "speedometer",
                "tools", "bar-chart", "clipboard-data"],
         menu_icon="cast",
